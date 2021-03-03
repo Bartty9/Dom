@@ -8,6 +8,6 @@ namespace Dom
 {
     class Room : Location
     {
-        // komentarz testowy
+        
     }
 }
