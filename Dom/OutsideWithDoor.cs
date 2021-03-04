@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Dom
 {
-    interface IHasExteriorDoor
+    class OutsideWithDoor : Outside, IHasExteriorDoor
     {
-        string DoorDescription { get; }
-        Location DoorLocation { get; }
+        public string DoorDescription { get; }
+        public Location DoorLocation { get; }
     }
 }
