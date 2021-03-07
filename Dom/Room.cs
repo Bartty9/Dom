@@ -13,6 +13,12 @@ namespace Dom
         {
             this.decoration = decoration;
         }
-
+        public override string Description
+        {
+            get
+            {
+                return base.Description + " Widzisz tutaj " + decoration + ".";
+            }
+        }
     }
 }

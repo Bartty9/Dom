@@ -12,9 +12,66 @@ namespace Dom
 {
     public partial class Form1 : Form
     {
+        Location currentLocation;
+
+        Outside garden;
+        OutsideWithDoor backYard, frontYard;
+        RoomWithDoor livingRoom, kitchen;
+        Room diningRoom;
+
         public Form1()
         {
             InitializeComponent();
+            CreateObjects();
+            MoveToANewLocation(livingRoom);
+        }
+
+        private void goHere_Click(object sender, EventArgs e)
+        {
+            MoveToANewLocation(currentLocation.Exits[exits.SelectedIndex]);
+        }
+
+        private void goThroughTheDoor_Click(object sender, EventArgs e)
+        {
+            IHasExteriorDoor hasDoor = currentLocation as IHasExteriorDoor;
+            MoveToANewLocation(hasDoor.DoorLocation);
+        }
+
+        private void CreateObjects()
+        {
+            livingRoom = new RoomWithDoor("Salon", "antyczny dywan", "dębowe drzwi z mosiężną klamką");            
+            diningRoom = new Room("Jadalnia", "krycztałowy żyrandol");            
+            kitchen = new RoomWithDoor("Kuchnia", "nierdzewne stalowe sztućce", "rozsuwane drzwi");            
+            backYard = new OutsideWithDoor("Podwórko za domem", true, "rozsuwane drzwi");            
+            frontYard = new OutsideWithDoor("Podwórko przed domem", false, "dębowe drzwi z mosiężnką klamką");
+            garden = new Outside("Ogród", false);
+
+            diningRoom.Exits = new Location[] { livingRoom, kitchen };
+            livingRoom.Exits = new Location[] { diningRoom };
+            kitchen.Exits = new Location[] { diningRoom };
+            backYard.Exits = new Location[] { frontYard, garden };
+            frontYard.Exits = new Location[] { backYard, garden };
+            garden.Exits = new Location[] { frontYard, backYard };
+
+            frontYard.DoorLocation = livingRoom;
+            backYard.DoorLocation = kitchen;
+            kitchen.DoorLocation = backYard;
+            livingRoom.DoorLocation = frontYard;
+        }
+        private void MoveToANewLocation(Location newLocation)
+        {
+            currentLocation = newLocation;
+            exits.Items.Clear();
+            for (int i = 0; i < currentLocation.Exits.Length; i++)
+                exits.Items.Add(currentLocation.Exits[i].Name);
+            exits.SelectedIndex = 0;
+
+            description.Text = currentLocation.Description;
+
+            if (currentLocation is IHasExteriorDoor)
+                goThroughTheDoor.Visible = true;
+            else
+                goThroughTheDoor.Visible = false;
         }
     }
 }

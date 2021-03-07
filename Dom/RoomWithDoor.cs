@@ -8,8 +8,12 @@ namespace Dom
 {
     class RoomWithDoor : Room, IHasExteriorDoor
     {
-        public string DoorDescription { get; }
-        public Location DoorLocation { get; }
-        public RoomWithDoor(string )
+        public string DoorDescription { get; private set; }
+        public Location DoorLocation { get; set; }
+        public RoomWithDoor(string name, string decoration, string doorDescription) : base(name, decoration)
+        {
+            this.DoorDescription = doorDescription;
+        }
+        public override string Description => base.Description + " Widzisz też " + DoorDescription + ".";
     }
 }
